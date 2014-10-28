@@ -1,0 +1,115 @@
+# Updated by Scout %_VERSION%, %_DATE%
+# Copyright 2001, 2002 by Jeffrey Fulmer
+#
+# Scout configuration file -- edit as necessary
+# For more information about configuring and running
+# this program, visit: http://www.joedog.org
+ 
+#
+# signify verbose mode, true turns on verbose output
+# ex: verbose = true|false
+#
+verbose = true
+
+#
+# HTTP protocol.  Options HTTP/1.1 and HTTP/1.0.
+# Some webservers have broken implementation of the
+# 1.1 protocol which skews throughput evaluations.
+# If you notice some scout clients hanging for
+# extended periods of time, change this to HTTP/1.0
+# ex: protocol = HTTP/1.1
+#     protocol = HTTP/1.0
+#
+protocol = HTTP/1.1
+
+#
+# connection timeout value. Set the value in seconds for
+# socket connection timeouts. The default value is 30 seconds.
+# You might want to increased that number under heavy load.
+# ex: timeout = 30
+#
+# timeout = 
+
+#
+# show-codes: if true, this directive tells scout to write
+# the return codes to the urls.txt file. This is handy for 
+# server trouble-shooting, link checking, etc. By default 
+# this value is set to false.
+# ex: show-codes = false
+#
+# show-codes = 
+
+#
+# images: if true, this directive tells scout to parse the
+# <img src=...> tag, check the integrity of the image link
+# and add the image to the urls.txt file. The default value
+# is false.
+# ex: image = false
+#
+# images = 
+
+#
+# set the scout User-Agent to identify yourself.
+# ex: user-agent = Limey The Bulldog
+#
+# user-agent =
+
+#
+# WWW-Authenticate login. When scout hits a webpage
+# that requires basic authentication, it will search
+# it's logins for authentication which matches the 
+# specific realm requested by the server. If it finds 
+# a match, it will send that login information. If it
+# fails to match the realm, it will send the default
+# login information. (Default is "all"). You may 
+# configure scout with several logins as long as no
+# two realms match. The format for logins is:
+# username:password[:realm] where "realm" is optional.
+# If you do not supply a realm, then it will default
+# to "all"
+# ex: login = jdfulmer:whoohoo:Admin
+#     login = jeff:haha
+# 
+# login = 
+
+#
+# WWW-Authenticate username and password.  When scout
+# hits a webpage that requires authentication, it will
+# send this user name and password to the server.  Note
+# this is NOT form based authentication.  You will have
+# to construct URLs for that.
+# THIS IS DEPRECATED use: login = username:password
+#
+# ex: username = jdfulmer
+#     password = whoohoo
+#
+# username =
+# password = 
+
+#
+# Proxy protocol. This option allows you to select a proxy
+# server stress testing. The proxy will request the URL(s)
+# specified by -u"my.url.org" OR from the urls.txt file.
+#
+# ex: proxy-host = proxy.whoohoo.org
+#     proxy-port = 8080
+#
+# proxy-host =
+# proxy-port = 
+
+#
+# Proxy-Authenticate. When scout hits a proxy server which
+# requires username and password authentication, it will this
+# username and password to the server. The format is username,
+# password and optional realm each separated by a colon. You
+# may enter more than one proxy-login as long as each one has
+# a different realm. If you do not enter a realm, then scout 
+# will send that login information to all proxy challenges. If
+# you have more than one proxy-login, then scout will attempt
+# to match the login to the realm.
+# ex: proxy-login: jeff:secret:corporate
+#     proxy-login: jeff:whoohoo
+#
+# proxy-login =
+
+

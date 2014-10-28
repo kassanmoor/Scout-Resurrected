@@ -1,0 +1,238 @@
+dnl REQUIRE AUTOCONF 2.50 OR HIGHER...
+AC_PREREQ(2.50)
+ 
+dnl
+dnl Process this file with autoconf to produce a configure script.
+dnl
+AC_INIT
+AC_CONFIG_SRCDIR([src/setup.h])
+AM_CONFIG_HEADER(include/config.h)
+ 
+dnl
+dnl Define the utils directory
+dnl
+AC_CONFIG_AUX_DIR(utils)
+ 
+VERSION=`sed -e 's/^.*"\(.*\)";$/\1/' ${srcdir}/src/version.c`
+AM_INIT_AUTOMAKE(scout, $VERSION)
+DATE=`${CONFIG_SHELL} ${srcdir}/utils/mkstamp`
+AC_SUBST(DATE)  
+
+dnl Check for AIX
+AC_AIX
+
+AM_PROG_LIBTOOL 
+
+dnl
+dnl canonicalize the host
+dnl
+PLATFORM="${host_vendor}-${host_cpu}-${host_os}"
+AC_SUBST(PLATFORM)
+
+dnl
+dnl Get the compiler
+dnl
+AC_PROG_CC
+
+dnl Check for POSIX-compatible shell
+AC_PROG_SHELL
+
+if test -n "$auto_cflags"; then
+  if test -n "$GCC"; then
+    CFLAGS="$CFLAGS -g -O2 -Wall -Wno-implicit"
+  else
+    case "$host_os" in
+      *hpux*)  CFLAGS="$CFLAGS +O3"                      ;;
+      *ultrix* | *osf*) CFLAGS="$CFLAGS -O -Olimit 2000" ;;
+      *)       CFLAGS="$CFLAGS -O" ;;
+    esac
+  fi
+fi
+
+AC_PROG_MAKE_SET
+AC_PROG_INSTALL
+
+dnl
+dnl with debugging
+dnl
+debugging="no"
+AC_ARG_WITH(debugging,dnl
+[  --with-debugging        compile with program debugging],
+[  debugging="$withval"                                  ])
+if test "$debugging" != "no"; then
+  AC_MSG_RESULT(checking for debugging level... one)
+  AC_DEFINE(DEBUG)
+else
+  AC_MSG_RESULT(checking for debugging level... zero)
+fi 
+
+dnl 
+dnl with SSL support
+dnl
+MYSSL=off
+sslfound=locate
+SSL_INCLUDE=
+SSL_LDFLAGS=
+SSL_LIBS=
+AC_ARG_WITH(ssl,dnl
+[  --with-ssl              compile with ssl support],
+[  MYSSL="$withval"                                ])
+if test X"$MYSSL" = Xoff
+then
+  AC_MSG_RESULT(checking for ssl support... no)
+else
+  AC_MSG_RESULT(checking for ssl support... yes)
+fi
+
+dnl 
+dnl Check for ssl libraries
+dnl
+if test X"$MYSSL" = Xno
+then
+  AC_MSG_RESULT(HTTPS/ssl support disabled)
+else
+  AC_CHECK_HEADER($MYSSL/include/openssl/opensslv.h, sslfound=yes, sslfound=locate)
+  if test $sslfound = "locate"; then
+     dnl the user probably misunderstood the option....
+     for dir in /usr /usr/local /usr/local/ssl /usr/pkg /usr/lib/ssl /usr/include/ssl /usr/include; do
+       AC_CHECK_HEADER($dir/include/openssl/opensslv.h, sslfound=yes, sslfound=no)
+       if test $sslfound = yes ; then
+         SSL_LDFLAGS="-L$dir/lib"
+         SSL_INCLUDE="-I$dir/include/openssl -I$dir/include"
+         SSL_LIBS="-lssl -lcrypto"
+         AC_SUBST(SSL_INCLUDE)
+         AC_SUBST(SSL_LDFLAGS)
+         AC_SUBST(SSL_LIBS)
+         AC_DEFINE(HAVE_SSL)
+      fi
+    done
+  else
+    dnl I know,  this is an example of poor
+    dnl coding style. I should have swapped
+    dnl the condition:
+    dnl if then; assignment else do something
+    dnl
+    echo "found ssl in $MYSSL"
+    SSL_LDFLAGS="-L$MYSSL/lib"
+    SSL_INCLUDE="-I$MYSSL/include/openssl -I$MYSSL/include"
+    SSL_LIBS="-lssl -lcrypto"
+    AC_SUBST(SSL_INCLUDE)
+    AC_SUBST(SSL_LDFLAGS)
+    AC_SUBST(SSL_LIBS)
+    AC_DEFINE(HAVE_SSL)
+  fi
+fi
+
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS(fcntl.h unistd.h)
+AC_CHECK_HEADERS(signal.h)
+AC_CHECK_HEADERS(stdarg.h)
+AC_CHECK_HEADERS(setjmp.h)
+AC_CHECK_HEADERS(sys/socket.h)
+AC_CHECK_HEADERS(sys/select.h)
+AC_CHECK_HEADERS(netdb.h)
+AC_CHECK_HEADERS(sys/time.h sys/times.h)
+AC_CHECK_HEADERS(sys/types.h)
+AC_CHECK_HEADERS(sys/resource.h)
+AC_CHECK_HEADERS(sys/ipc.h)
+AC_CHECK_HEADERS(errno.h)
+AC_CHECK_HEADERS(arpa/inet.h netinet/in.h netdb.h)
+
+dnl
+dnl Checks for typedefs, structures, and compiler characteristics.
+dnl
+AC_C_CONST
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+
+dnl
+dnl Return type of signal-handlers
+dnl
+AC_TYPE_SIGNAL
+
+dnl
+dnl Checks for library functions.
+dnl
+AC_FUNC_ALLOCA
+AC_FUNC_SETPGRP 
+AC_CHECK_FUNCS(strchr memcpy strstr strcmp strncmp strncpy strlen)
+AC_CHECK_FUNCS(strncasecmp strcasecmp strncmp)
+AC_CHECK_FUNCS(socket, , AC_CHECK_LIB(socket, socket))
+AC_CHECK_FUNCS(gethostbyname, , AC_CHECK_LIB(nsl, gethostbyname))
+AC_CHECK_FUNCS(snprintf)
+
+dnl
+dnl Check for libraries
+dnl
+AC_CHECK_LIB(socket, socket)
+
+dnl resolve lib?
+AC_CHECK_LIB(resolv, res_query, [SCOUT_LIBS="-lresolv $LIBS"], , -lnsl)
+
+AC_SUBST(SCOUT_LIBS)
+
+dnl 
+dnl Create <joedog/joepath.h> header file
+dnl
+AC_OUTPUT_COMMANDS([
+	outfile=include/joedog/joepath.h
+	tmpfile=${outfile}
+	cat > $tmpfile << _EOF_
+/**
+ * Path Header
+ *
+ * Copyright (C) 2000 2001 Jeffrey Fulmer <jdfulmer@armstrong.com>
+ * This file is part of Siege
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ */
+#define SCOUT_HOME     "$prefix"
+#define CNF_FILE       "$sysconfdir/urls.txt"
+#define LOG_FILE       "$localstatedir/scout.log"
+
+
+
+_EOF_
+], [ prefix=$prefix sysconfdir=$sysconfdir localstatedir=$localstatedir ])
+
+dnl
+dnl create the configuration file
+dnl
+AC_OUTPUT_COMMANDS([
+  infile=doc/scoutrc.in
+  outfile=doc/scoutrc
+  rm -f $outfile
+  sed -e "s|%_VERSION%|$VERSION|" \
+      -e "s|%_DATE%|$DATE|" \
+      < $infile > $outfile
+ 
+], [ VERSION=$VERSION DATE="$DATE" ]) 
+
+dnl
+dnl Write platform to file for support reporting
+dnl
+AC_OUTPUT_COMMANDS([
+	outfile=PLATFORM
+	tmpfile=${outfile}
+	cat > $tmpfile << _EOF_
+$PLATFORM
+_EOF_
+], [PLATFORM=$PLATFORM])
+
+AC_OUTPUT(Makefile src/Makefile src/Makefile doc/Makefile lib/Makefile lib/joedog/Makefile include/Makefile include/joedog/Makefile utils/Makefile)

@@ -1,0 +1,38 @@
+To email a contributor remove "DELETE" from the email address.
+(The DELETEs are necessary as this list is published online.) 
+
+2002/12/12 Jeffrey Fulmer <jdfulmer@DELETEarmstrong.com>
+ *--SCOUT RELEASE--* SCOUT-0_86-DEC-12-2002
+
+2002/12/10 Jeffrey Fulmer <jdfulmer@DELETEarmstrong.com>
+ * src/queue.h            added code to the queue struct
+ * src/queue.c            writes only URLs whose response is < 400
+ * src/client.c           sets the HTTP response code in the queue
+
+2002/12/09 Jeffrey Fulmer <jdfulmer@DELETEarmstrong.com>
+ *--SCOUT RELEASE--* SCOUT-0_85-DEC-09-2002
+
+2002/12/07 Jeffrey Fulmer <jdfulmer@DELETEarmstrong.com>
+ * src/setup.h            revised CONFIG struct added auth
+ * src/auth.c             added to the distribution.
+ * src/auth.h             added to the distribution.
+ * src/parser.c           added to the distribution.
+ * src/parser.h           added to the distribution.
+ * src/sock.c             improved reads and writes with code
+                          from siege/src/sock.c
+ * src/url.c              added logic from siege/src/url.c
+
+NOTE: scout versions 81 through 84 were never publically
+      released.
+
+2002/08/08 Jeffrey Fulmer <jdfulmer@DELETEarmstrong.com>
+ *--SCOUT RELEASE--* SCOUT-0_80-AUG-08-2002
+
+2002/08/07 Jeffrey Fulmer <jdfulmer@DELETEarmstrong.com>
+ * src/*                  rebuilt completely on siege technology.
+
+2002/03/07 Jeffrey Fulmer <jdfulmer@DELETEarmstrong.com>
+ *--SCOUT RELEASE--* SCOUT-0_70-MAR-04-2002 
+
+2002/03/07 Jeffrey Fulmer <jdfulmer@DELETEarmstrong.com>
+ * Initial revision

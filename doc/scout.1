@@ -1,0 +1,74 @@
+.ig \"-*- Scout -*-
+Copyright (C) 2001 Jeffrey Fulmer
+
+Scout is distibuted under the terms of the GNU GPL.
+
+..
+.de TQ
+.br
+.ns
+.TP \\$1
+..
+.\" Like TP, but if specified indent is more than half
+.\" the current line-length - indent, use the default indent.
+.de Tp
+.ie \\n(.$=0:((0\\$1)*2u>(\\n(.lu-\\n(.iu)) .TP
+.el .TP "\\$1"
+..
+.TH SCOUT 1 "04 March 2001" "Scout v0.50"
+.SH PROGRAM NAME
+.B scout
+\- surveys a webserver and prepares the urls.txt file for a siege.
+.SH INTRODUCTION
+.LP
+.B ALERT:
+if you are not familiar with siege, then read the man page siege(1) before you read this document.
+
+When siege is invoked for regression testing, it reads a list of URLs into memory and runs through them either sequentially (default) or randomly (siege -i/--internet).  By default that file is called urls.txt and it is installed in PREFIX/etc. Scout provides a simple means of adding URLs to that file.  It follows the links on a webserver and appends them to urls.txt.  This process works completely independently of siege.  It is not necessary to scout a server before laying siege.  You may add URLs to urls.txt by any means possible.  Scout is there to make life easier.
+
+.SH INVOCATION
+The format for invoking scout is:   scout options... \fR
+Scout supports the following command line options:\fR\fR
+.TP
+\fB\-V\fR, \fB\-\-version\fR
+VERSION, prints the version number
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+HELP, prints the help section which includes a summary of all the command line options.
+.TP
+\fB\-f FILE\fR, \fB\-\-file=FILE\fR
+FILE, the default URL file is PREFIX/etc/urls.txt. To write the links to a different file, use this  option,  i.e., scout -f myurls.txt  That example creates a file in your current working directory called "myurls.txt" Scout will fill that file with links.
+.TP
+\fB\-n\fR, \fB\-\-new\fR
+NEW, this option creates a new urls.txt file.  This option causes scout to overwrite an existing file with a new one.  The \-n/\-\-new option can be used with the -f/\-\-file option described above.
+.TP
+\fB\-p\fR, \fB\-\-pictures\fR
+PICS, include image files in the output file.
+
+.SH AUTHOR
+Jeffrey Fulmer <jdfulmer@armstrong.com>
+.SH BUGS
+Report bugs to jdfulmer@armstrong.com.
+Give a detailed description of the problem
+and report the version of scout that
+you are using.
+.SH COPYRIGHT
+Copyright \(co 2000 2001 Jeffrey Fulmer
+.LP
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any lat
+er version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more det
+ails.
+
+You should have received a copy of the GNU General Public License along with this program; if not, write to the Fr
+ee Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+.LP
+.SH AVAILABILITY
+The most recent released version of scout is available in the siege distribution via 
+anonymous ftp from ftp.armstrong.com in the directory pub/siege.
+.LP
+.SH SEE ALSO
+siege(1) layingsiege(1) urls_txt(1)

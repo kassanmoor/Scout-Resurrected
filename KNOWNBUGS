@@ -1,0 +1,13 @@
+
+-----------------------------------
+KNOWN BUGS AND OTHER SQUISHY THINGS
+-----------------------------------
+Updated: Sat Jun  8 16:56:55 EDT 2002
+
+ ** Scout has trouble following non-well formatted HTML.
+    [update] Improved handling has been adding for non-
+    absolute paths and references to "a href=haha.shtml"
+    now assume current working directory. Scout does not
+    handle javascript and dynamically assigned links.
+
+

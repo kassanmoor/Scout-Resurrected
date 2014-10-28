@@ -1,0 +1,39 @@
+NEWS AND RELEASE INFORMATION
+
+RELEASE: Scout 0.85
+-------------------
+** This release includes several performance
+   improvements and numerous bug fixes.
+
+RELEASE: Scout 0.80
+-------------------
+** Completely rebuilt on siege technology. 
+   Adds improved link handling and parsing.
+   Fixes several minor bugs.
+
+RELEASE: Scout 0.70
+-------------------
+** Initial release
+
+
+
+
+
+----------------------------------------------------------------------
+Copyright information:
+ 
+Copyright (C) 2000-2002 
+Jeffrey Fulmer <jdfulmer@armstrong.com>
+and Ken Jones: <linkcheck@inter7.com>
+ 
+Permission is granted to anyone to make or distribute verbatim
+copies of this document as received, in any medium, provided that
+the copyright notice and this permission notice are preserved, thus
+giving the recipient permission to redistribute in turn.
+ 
+Permission is granted to distribute modified versions of this
+document, or of portions of it, under the above conditions,
+provided also that they carry prominent notices stating who last
+changed them. 
+
+
