@@ -158,7 +158,7 @@ parse_text( char *path, char *html_text )
       tmp++;
     }
   }   /* end while loop */
-  return;
+  return NULL;
 }
 
 char *
@@ -212,7 +212,7 @@ parse_control( char *path, char *token )
       if( tmp != NULL ){
         assemble_url( path, tmp );
       }
-      return;
+      return NULL;
     }
     else if( !strncmp( tmp, "location.href", 13 )){
       tmp = strtok(NULL, TOKENS_PLUS);
@@ -233,7 +233,7 @@ parse_control( char *path, char *token )
         }
       }
       /* user doesn't want images */
-      else{ return; } 
+      else{ return NULL; } 
     }
     else if( !strncmp( tmp, "frame", 5 )){
       tmp = strtok(NULL, TOKENS);
@@ -267,12 +267,12 @@ assemble_url( char *ref, char *req )
   memset( url, 0, URLBUF );
   strncpy( buf, req, BUF-1 );
   if( !strncmp( buf, "#", 1 ))
-    return; /* we're not a browswer... */
+    return NULL; /* we're not a browswer... */
   else if( has_protocol( buf )){
     if( is_supported( buf ))
       snprintf( url, URLBUF, "%s", buf );
     else
-      return;
+      return NULL;
   }
   else if( !strncmp( buf, "/", 1 )){
     snprintf( url, URLBUF, "http://%s%s", my.hostname, buf );
@@ -283,7 +283,7 @@ assemble_url( char *ref, char *req )
       }
     }
     else
-      return;
+      return NULL;
   } 
   else if(( !strncmp( buf, ".", 1 )) || ( isalpha( buf[0] ))){
     int  x, y, r1, r2;
@@ -300,7 +300,7 @@ assemble_url( char *ref, char *req )
       if( !find_node( url )){
         add_node( url );
       }
-      return;
+      return NULL;
     }
     else{
       request   = split( '/', buf,  &r2 );
@@ -337,7 +337,7 @@ assemble_url( char *ref, char *req )
       }
     }
     else
-      return;
+      return NULL;
   }
   else{
     snprintf( url, URLBUF, "http://%s/%s", my.hostname, buf );
@@ -348,7 +348,7 @@ assemble_url( char *ref, char *req )
       }
     }
     else
-      return;
+      return NULL;
   }
 } /* end of assemble_url */
 
